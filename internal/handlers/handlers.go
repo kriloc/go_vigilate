@@ -127,10 +127,30 @@ func (repo *DBRepo) AllHosts(w http.ResponseWriter, r *http.Request) {
 
 // Host shows the host add/edit form
 func (repo *DBRepo) Host(w http.ResponseWriter, r *http.Request) {
-	err := helpers.RenderPage(w, r, "host", nil, nil)
+	id, _ := strconv.Atoi(chi.URLParam(r, "id"))
+	//log.Println("Id is:", id)
+	var h models.Host
+	if id > 0 {
+		// get the host from the db
+	}
+
+	//h.HostName = "Some host"  // for test
+	vars := make(jet.VarMap)
+	vars.Set("host", h)
+
+	err := helpers.RenderPage(w, r, "host", vars, nil)
 	if err != nil {
 		printTemplateError(w, err)
 	}
+}
+
+// PostHost handles posting of host form
+func (repo *DBRepo) PostHost(w http.ResponseWriter, r *http.Request) {
+	//err := helpers.RenderPage(w, r, "host", nil, nil)
+	//if err != nil {
+	//	printTemplateError(w, err)
+	//}
+	w.Write([]byte("posted form!"))
 }
 
 // AllUsers lists all admin users

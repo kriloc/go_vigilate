@@ -26,6 +26,47 @@
 
 <div class="row">
     <div class="col">
+        <form method="post" action="/admin/host/0" novalidate class="needs-validation" id="host-form">
+            <input type="hidden" name="action" value="1" id="action">
+            <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
+        <ul class="nav nav-tabs" id="host-tabs">
+            <li class="nav-item">
+                <a class="nav-link active" href="#host-content" data-target="" data-toggle="tab"
+                   id="host-tab" role="tab">Host</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#manage-content" data-target="" data-toggle="tab"
+                   id="services-tab" role="tab">Manage Services</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#healthy-content" data-target="" data-toggle="tab"
+                   id="healthy-tab" role="tab">Healthy</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#warning-content" data-target="" data-toggle="tab"
+                   id="warning-tab" role="tab">Warning</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#problem-content" data-target="" data-toggle="tab"
+                   id="problem-tab" role="tab">Problems</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#pending-content" data-target="" data-toggle="tab"
+                   id="pending-tab" role="tab">Pending</a>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="host-tab-content" style="min-height: 55vh">
+
+            <div class="tab-pane fade show active" role="tabpanel" aria-labelledby="host-tab"
+                 id="host-content">
+                <div class="row">
+                    <div class="col-md-6 col-xs-12">
+
+                        <div class="mt-3 mb-3">
+                            <label for="host_name" class="form-label">Host Name</label>
+                            <input required id="host_name" name="host_name" value="" type="text" class="form-control">
+                        </div>
 
         <div class="float-right">
             <a class="btn btn-outline-secondary" href="/admin/host/0#host">New Host</a>
