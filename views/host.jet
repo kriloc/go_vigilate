@@ -109,7 +109,7 @@ Host
                             </div>
 
                             <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" value="{{host.Active}}" id="active" name="active">
+                                <input class="form-check-input" value="1" {{if host.Active == 1}} checked {{end}} type="checkbox" id="active" name="active">
                                 <label class="form-check-label" for="active">Active</label>
                             </div>
                         </div>
@@ -138,7 +138,37 @@ Host
 
                 <div class="tab-pane fade" role="tabpanel" aria-labelledby="services-tab"
                      id="services-content">
-                    services content
+                    <div class="row">
+                        <div class="col">
+                            <h3 class="mt-3">Services</h3>
+
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th>Service</th>
+                                    <th>Status</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>HTTP</td>
+                                    <td>
+                                        <div class="form-check form-switch">
+<!--      data-* attribute 是在製作網頁的過程中，會添加一些自己需要用到的屬性名稱, 使用JS取得data-* attribute的屬性值-->
+                                            <input class="form-check-input" value="1" type="checkbox"
+                                                   id="http_service"
+                                                   data-type="toggle-service"
+                                                   data-service="1"
+                                                   data-host-id="{{host.ID}}"
+                                                   name="http">
+                                            <label class="form-check-label" for="active">Active</label>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="tab-pane fade" role="tabpanel" aria-labelledby="healthy-tab"
@@ -173,6 +203,31 @@ Host
 
 {{ block js() }}
 <script>
+
+    document.addEventListener("DOMContentLoaded", function(){
+        let toggles = document.querySelectorAll("[data-service]");
+
+        for(let i=0; i<toggles.length ; i++){
+            console.log("Host ID:", toggles[i].getAttribute("data-host-id"));
+
+            toggles[i].addEventListener("change", function () {
+                // console.log("Toggle was changed.")
+                if (this.checked){
+
+                }else {
+
+                }
+
+                let formData = new FormData();
+
+                fetch("admin/host/ajax/toggle-service", {
+                    method: "POST",
+                    body: formData,
+                })
+            })
+        }
+    })
+
     function val() {
         document.getElementById("action").value = 0;
         let form = document.getElementById("host-form");
