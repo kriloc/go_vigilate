@@ -150,21 +150,26 @@ Host
                                 </tr>
                                 </thead>
                                 <tbody>
+
+                                {{range host.HostServices}}
                                 <tr>
-                                    <td>HTTP</td>
+                                    <td>{{.Service.ServiceName}}</td>
                                     <td>
                                         <div class="form-check form-switch">
-<!--      data-* attribute 是在製作網頁的過程中，會添加一些自己需要用到的屬性名稱, 使用JS取得data-* attribute的屬性值-->
+                                <!--      data-* attribute 是在製作網頁的過程中，會添加一些自己需要用到的屬性名稱, 使用JS取得data-* attribute的屬性值-->
                                             <input class="form-check-input" value="1" type="checkbox"
-                                                   id="http_service"
                                                    data-type="toggle-service"
-                                                   data-service="1"
-                                                   data-host-id="{{host.ID}}"
-                                                   name="http">
+                                                   data-service="{{.ServiceID}}"
+                                                   data-host-id="{{.HostID}}"
+                                                   {{if .Active ==1 }}
+                                                   checked
+                                                   {{end}}
+                                                   name="{{.Service.ServiceName}}">
                                             <label class="form-check-label" for="active">Active</label>
                                         </div>
                                     </td>
                                 </tr>
+                                {{end}}
                                 </tbody>
                             </table>
                         </div>
@@ -212,17 +217,28 @@ Host
 
             toggles[i].addEventListener("change", function () {
                 // console.log("Toggle was changed.")
-                if (this.checked){
-
-                }else {
-
+                let active = "1";
+                if (!this.checked){
+                    active = "0";
                 }
-
                 let formData = new FormData();
+                formData.append("host_id", this.getAttribute("data-host-id"));
+                formData.append("service_id", this.getAttribute("data-service"));
+                formData.append("active", active);
+                formData.append("csrf_token", "{{.CSRFToken}}");
 
-                fetch("admin/host/ajax/toggle-service", {
+                fetch("/admin/host/ajax/toggle-service", {
                     method: "POST",
                     body: formData,
+                })
+                .then(response => response.json())
+                .then( data => {
+                    console.log("called ajax");
+                    if(data.ok){
+                        successAlert("Changes saved");
+                    }else {
+                        errorAlert("Something went wrong");
+                    }
                 })
             })
         }

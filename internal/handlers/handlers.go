@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/CloudyKit/jet/v6"
 	"github.com/go-chi/chi"
@@ -48,7 +49,15 @@ func (repo *DBRepo) AdminDashboard(w http.ResponseWriter, r *http.Request) {
 	vars.Set("no_pending", 0)
 	vars.Set("no_warning", 0)
 
-	err := helpers.RenderPage(w, r, "dashboard", vars, nil)
+	allHosts, err := repo.DB.AllHosts()
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	vars.Set("hosts", allHosts)
+
+	err = helpers.RenderPage(w, r, "dashboard", vars, nil)
 	if err != nil {
 		printTemplateError(w, err)
 	}
@@ -135,6 +144,36 @@ func (repo *DBRepo) AllHosts(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		printTemplateError(w, err)
 	}
+}
+
+type serviceJSON struct {
+	OK bool `json:"ok"`
+}
+
+func (repo *DBRepo) TogglerServiceForHost(w http.ResponseWriter, r *http.Request) {
+	err := r.ParseForm()
+	if err != nil {
+		log.Println(err)
+	}
+
+	var resp serviceJSON
+	resp.OK = true
+
+	hostID, _ := strconv.Atoi(r.Form.Get("host_id"))
+	serviceID, _ := strconv.Atoi(r.Form.Get("service_id"))
+	active, _ := strconv.Atoi(r.Form.Get("active"))
+
+	log.Println("Data: ", hostID, serviceID, active)
+
+	err = repo.DB.UpdateHostServiceStatus(hostID, serviceID, active)
+	if err != nil {
+		resp.OK = false
+		log.Println(err)
+	}
+
+	out, _ := json.MarshalIndent(resp, "", "")
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(out)
 }
 
 // Host shows the host add/edit form
