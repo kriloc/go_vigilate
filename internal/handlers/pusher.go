@@ -2,7 +2,7 @@ package handlers
 
 import (
 	"github.com/pusher/pusher-http-go"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
 	"strconv"
@@ -12,7 +12,8 @@ func (repo *DBRepo) PusherAuth(w http.ResponseWriter, r *http.Request) {
 	// user 會在 app.Session.Put中放入 Context中
 	userId := repo.App.Session.GetInt(r.Context(), "userID")
 	u, _ := repo.DB.GetUserById(userId)
-	params, _ := ioutil.ReadAll(r.Body)
+	//params, _ := ioutil.ReadAll(r.Body)  // go 1.16之後不建議 ioutil
+	params, _ := io.ReadAll(r.Body)
 
 	presenceData := pusher.MemberData{
 		UserID: strconv.Itoa(userId),

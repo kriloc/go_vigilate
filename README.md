@@ -64,6 +64,20 @@ An open source Pusher server implementation compatible with Pusher client librar
 
 `./ipe`
 
+## Test
+
+### SQL for Test
+
+* The Dashboard shows status count
+
+```sql
+SELECT
+(select count(id) from host_services where active =1 and status='pending') as pending,
+(select count(id) from host_services where active =1 and status='healthy') as healthy,
+(select count(id) from host_services where active =1 and status='warning') as warning,
+(select count(id) from host_services where active =1 and status='problem') as problem
+```
+
 ## libs
 [scs](https://github.com/alexedwards/scs) : HTTP Session Management for Go
 

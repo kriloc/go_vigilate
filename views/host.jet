@@ -60,6 +60,7 @@ Host
                     <a class="nav-link" href="#pending-content" data-target="" data-toggle="tab"
                        id="pending-tab" role="tab">Pending</a>
                 </li>
+
                 {{end}}
             </ul>
 
@@ -193,7 +194,7 @@ Host
 
                 <div class="tab-pane fade" role="tabpanel" aria-labelledby="pending-tab"
                      id="pending-content">
-                    pending content
+                    待開發...
                 </div>
 
                 {{end}}
