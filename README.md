@@ -68,7 +68,7 @@ An open source Pusher server implementation compatible with Pusher client librar
 
 ### SQL for Test
 
-* The Dashboard shows status count
+* The Dashboard shows status count (in code)
 
 ```sql
 SELECT
