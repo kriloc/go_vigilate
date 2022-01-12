@@ -58,6 +58,9 @@ https://github.com/go-chi/chi
 
 chi is a lightweight, idiomatic and composable router for building Go HTTP services.
 
+* 2022 upgrade to v5
+go get -u github.com/go-chi/chi/v5
+
 https://github.com/dimiro1/ipe
 
 An open source Pusher server implementation compatible with Pusher client libraries written in Go.
@@ -83,3 +86,7 @@ SELECT
 
 [Pusher Channels HTTP Go Library](https://github.com/pusher/pusher-http-go)
 ：The Golang library for interacting with the Pusher Channels HTTP API.
+
+[cron](https://github.com/robfig/cron)
+
+golang cron v3 定時任務 [ref](https://www.readfog.com/a/1637371620314157056)

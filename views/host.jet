@@ -2,7 +2,9 @@
 
 {{block css()}}
 <style>
-
+.pointer{
+    cursor: pointer;
+}
 </style>
 {{end}}
 
@@ -256,13 +258,22 @@ Host
                                 </thead>
                                 <tbody>
                                 {{range host.HostServices}}
-                                {{if .Status=="problem"}}
+                                {{if .Status == "problem"}}
                                 <tr>
-                                    <td>{{.Service.ServiceName}}</td>
-                                    <span class="badge bg-secondary"  onclick="checkNow({{.ID}})">
-                                        Check Now
-                                    </span>
-                                    <td>{{.LastCheck}}</td>
+                                    <td>
+                                        <span class="{{.Service.Icon}}"></span>
+                                        {{.Service.ServiceName}}
+                                        <span class="badge bg-secondary pointer" onclick="checkNow({{.ID}}, 'problem')">
+                                                Check Now
+                                            </span>
+                                    </td>
+                                    <td>
+                                        {{if dateAfterYearOne(.LastCheck)}}
+                                        {{dateFromLayout(.LastCheck, "2015-01-02 15:04")}}
+                                        {{else}}
+                                        Pending...
+                                        {{end}}
+                                    </td>
                                     <td></td>
                                 </tr>
                                 {{end}}
@@ -295,7 +306,7 @@ Host
                                             <span class="{{.Service.Icon}}">
                                             {{.Service.ServiceName}}
                                                 </span>
-                                            <span class="badge bg-secondary"  onclick="checkNow({{.ID}}, 'pending')">
+                                            <span class="badge bg-secondary pointer"  onclick="checkNow({{.ID}}, 'pending')">
                                             Check Now
                                             </span>
                                         </td>
@@ -402,6 +413,27 @@ Host
         .then(response => response.json())
         .then(data =>{
             console.log("ok:", data.ok, "message:", data.message);
+
+            if(data.ok){
+                if(data.old_status !== data.new_status) {
+                    // Toast是基於javascript的庫，用在網站上顯示消息或通知
+                    attention.toast({
+                        msg: data.message,
+                        icon: "info",
+                        timer: 60000,
+                        showCloseButton: true,
+                    })
+                }else{
+                    attention.toast({
+                        msg: "Services is still in"+ data.new_status +" state" ,
+                        icon: "info",
+                        timer: 3000,
+                        showCloseButton: true,
+                    })
+                }
+            }else{
+                errorAlert("Something went wrong");
+            }
         });
     }
 </script>
