@@ -269,7 +269,7 @@ Host
                                     </td>
                                     <td>
                                         {{if dateAfterYearOne(.LastCheck)}}
-                                        {{dateFromLayout(.LastCheck, "2015-01-02 15:04")}}
+                                        {{dateFromLayout(.LastCheck, "2006-01-02 15:04")}}
                                         {{else}}
                                         Pending...
                                         {{end}}

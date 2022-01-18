@@ -78,4 +78,45 @@
             }
         })
     });
+
+    // callback function
+    function updateSystemPref(prefName, prefValue){
+        //Javascript在 FormData 定義了一個介面方便開發者做像是 key/value 的應用，最常見的就是表單處理。
+        let formData = new FormData();
+        formData.append("pref_name", prefName);
+        formData.append("pref_value", prefValue);
+        formData.append("csrf_token", "{{.CSRFToken}}")
+
+        let ajax = new XMLHttpRequest();
+        ajax.responseType = "json";
+        ajax.open("POST", "/admin/preference/ajax/set-system-pref");
+        ajax.send(formData);
+        ajax.onreadystatechange = function (){
+            if (ajax.readyState === 4){
+                let resp = ajax.response;
+                if(!resp.ok){
+                    errorAlert("Errors:" + resp.message);
+                }
+            }
+        }
+    }
+
+    function toggleMonitoring(enabled){
+        let formData = new FormData();
+        formData.append("enabled", enabled);
+        formData.append("csrf_token", "{{.CSRFToken}}")
+
+        let ajax = new XMLHttpRequest();
+        ajax.responseType = "json";
+        ajax.open("POST", "/admin/preference/ajax/toggle-monitoring");
+        ajax.send(formData);
+        ajax.onreadystatechange = function (){
+            if (ajax.readyState === 4){
+                let resp = ajax.response;
+                if(!resp.ok){
+                    errorAlert("Errors:" + resp.message);
+                }
+            }
+        }
+    }
 </script>

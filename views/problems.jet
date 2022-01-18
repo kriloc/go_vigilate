@@ -43,7 +43,7 @@ Problem Services
                     </a>
                 </td>
                 <td>{{.Service.ServiceName}}</td>
-<!--                <td>{{.LastMessage}}</td>-->
+                <td> <span class="badge bg-danger">{{.Status}}</span></td>
                 <td> </td>
             </tr>
             {{end}}
