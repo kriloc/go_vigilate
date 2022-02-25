@@ -66,7 +66,7 @@ func routes() http.Handler {
 		mux.Get("/host/all", handlers.Repo.AllHosts)
 		mux.Get("/host/{id}", handlers.Repo.Host)
 		mux.Post("/host/{id}", handlers.Repo.PostHost)
-		mux.Post("/host/ajax/toggle-service", handlers.Repo.TogglerServiceForHost)
+		mux.Post("/host/ajax/toggle-service", handlers.Repo.ToggleServiceForHost)
 		mux.Get("/perform-check/{id}/{oldStatus}", handlers.Repo.TestCheck)
 		//	admin/host/ajax/toggle-service
 	})

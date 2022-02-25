@@ -156,7 +156,7 @@ type serviceJSON struct {
 	OK bool `json:"ok"`
 }
 
-func (repo *DBRepo) TogglerServiceForHost(w http.ResponseWriter, r *http.Request) {
+func (repo *DBRepo) ToggleServiceForHost(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
 	if err != nil {
 		log.Println(err)
@@ -175,6 +175,21 @@ func (repo *DBRepo) TogglerServiceForHost(w http.ResponseWriter, r *http.Request
 	if err != nil {
 		resp.OK = false
 		log.Println(err)
+	}
+
+	//broadcast
+	hs, _ := repo.DB.UpdateHostServiceByHostIdServiceID(hostID, serviceID)
+	h, _ := repo.DB.GetHostByID(hostID)
+
+	// add or remove host service from schedule
+	if active == 1 {
+		// add to schedule
+		repo.pushScheduleChangedEvent(hs, "pending")
+		repo.pushStatusChangedEvent(h, hs, "pending")
+		repo.addToMonitorMap(hs)
+	} else {
+		// remove from schedule
+		repo.removeFromMonitorMap(hs)
 	}
 
 	out, _ := json.MarshalIndent(resp, "", "	")
